@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#ff69b4" />
+    <meta
+      name="description"
+      content="CrochetAin - 코바늘 도안 생성기. 완성된 코바늘 작품 사진을 업로드하면 상세 도안을 생성해드립니다"
+    />
+    <meta name="keywords" content="코바늘, 도안, 뜨개질, 핸드메이드, crochet, pattern, CrochetAin" />
+    <meta name="author" content="CrochetAin" />
+    
+    <!-- 화면 회전 방지 (모바일만) -->
+    <meta name="screen-orientation" content="portrait" />
+    <meta name="orientation" content="portrait" />
+    
+    <!-- 보안 설정 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' http://localhost:5001 http://192.168.0.32:5001;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    
+    <!-- 모바일 최적화 -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="CrochetAin" />
+    
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <title>CrochetAin - 코바늘 도안 생성기</title>
+    
+    <style>
+      /* 기본 설정 */
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      
+      /* 모바일에서만 화면 회전 방지 */
+      @media screen and (max-width: 768px) and (orientation: landscape) {
+        body::before {
+          content: "📱 세로 모드로 돌려주세요";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.95);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          text-align: center;
+          z-index: 999999;
+        }
+        
+        #root {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
