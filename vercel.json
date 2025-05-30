@@ -1,9 +1,0 @@
-{
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "https://crochet-pattern-generator-production.up.railway.app/$1"
-    }
-  ]
-} 
