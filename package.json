@@ -1,0 +1,29 @@
+{
+  "name": "crochet-pattern-generator",
+  "version": "1.0.0",
+  "description": "Crochet pattern generator - Railway deployment",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "cd client && npm ci && npm run build",
+    "railway-build": "cd client && npm ci && npm run build && cd .. && npm ci",
+    "dev": "node server.js",
+    "client": "cd client && npm start",
+    "server": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1",
+    "dotenv": "^16.0.3",
+    "openai": "^4.20.1",
+    "node-cron": "^3.0.2",
+    "path": "^0.12.7"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "keywords": ["crochet", "pattern", "generator", "react", "nodejs"],
+  "author": "SungwookYun",
+  "license": "MIT"
+} 

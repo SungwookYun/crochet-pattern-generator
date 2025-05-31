@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crochet Ain 아이콘 생성기</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ff6b35;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-area {
+            border: 2px dashed #ff6b35;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .upload-area:hover {
+            background-color: #fff5f1;
+        }
+        .upload-area.dragover {
+            background-color: #ff6b35;
+            color: white;
+        }
+        .icon-preview {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 22%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(255,107,53,0.3);
+        }
+        .sizes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .size-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .size-item canvas {
+            border-radius: 15%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 8px;
+        }
+        .size-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+        .download-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .download-btn:hover {
+            background: #e55a2b;
+        }
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b35, #f7931e);
+            border-radius: 3px;
+            transition: width 0.3s;
+            width: 0%;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        .instructions h3 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧶 Crochet Ain 아이콘 생성기</h1>
+        
+        <div class="instructions">
+            <h3>📋 사용 방법:</h3>
+            <ol>
+                <li>1024x1024px 크기의 고품질 아이콘 이미지를 준비하세요</li>
+                <li>아래 영역에 이미지를 드래그 앤 드롭하거나 클릭해서 업로드하세요</li>
+                <li>자동으로 모든 필요한 크기의 아이콘이 생성됩니다</li>
+                <li>각 아이콘을 개별적으로 다운로드하세요</li>
+            </ol>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="icon-preview">🧶</div>
+            <p><strong>아이콘 이미지를 여기에 드래그하거나 클릭하세요</strong></p>
+            <p>권장: 1024x1024px PNG 파일</p>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        </div>
+
+        <div class="progress" id="progress" style="display: none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="sizes-grid" id="sizesGrid"></div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const sizesGrid = document.getElementById('sizesGrid');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+
+        // 필요한 아이콘 크기들
+        const iconSizes = [
+            // iOS
+            { size: 29, name: 'iOS Settings' },
+            { size: 40, name: 'iOS Spotlight' },
+            { size: 58, name: 'iOS Settings@2x' },
+            { size: 60, name: 'iOS App' },
+            { size: 76, name: 'iPad App' },
+            { size: 80, name: 'iOS Spotlight@2x' },
+            { size: 120, name: 'iOS App@2x' },
+            { size: 152, name: 'iPad App@2x' },
+            { size: 180, name: 'iOS App@3x' },
+            { size: 1024, name: 'App Store' },
+            
+            // Android
+            { size: 36, name: 'Android LDPI' },
+            { size: 48, name: 'Android MDPI' },
+            { size: 72, name: 'Android HDPI' },
+            { size: 96, name: 'Android XHDPI' },
+            { size: 144, name: 'Android XXHDPI' },
+            { size: 192, name: 'Android XXXHDPI' },
+            { size: 512, name: 'Play Store' },
+            
+            // PWA
+            { size: 128, name: 'PWA Small' },
+            { size: 384, name: 'PWA Large' }
+        ];
+
+        // 이벤트 리스너
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('drop', handleDrop);
+        uploadArea.addEventListener('dragleave', handleDragLeave);
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                processFile(file);
+            }
+        }
+
+        function processFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 업로드 가능합니다.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    generateIcons(img);
+                };
+                img.src = e.target.result;
+                
+                // 미리보기 업데이트
+                const preview = document.querySelector('.icon-preview');
+                preview.innerHTML = '';
+                const previewImg = document.createElement('img');
+                previewImg.src = e.target.result;
+                previewImg.style.width = '100%';
+                previewImg.style.height = '100%';
+                previewImg.style.objectFit = 'cover';
+                previewImg.style.borderRadius = '22%';
+                preview.appendChild(previewImg);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function generateIcons(sourceImg) {
+            progress.style.display = 'block';
+            sizesGrid.innerHTML = '';
+            
+            let completed = 0;
+            const total = iconSizes.length;
+
+            iconSizes.forEach((iconInfo, index) => {
+                setTimeout(() => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    canvas.width = iconInfo.size;
+                    canvas.height = iconInfo.size;
+                    
+                    // 고품질 리샘플링
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    
+                    // 이미지 그리기
+                    ctx.drawImage(sourceImg, 0, 0, iconInfo.size, iconInfo.size);
+                    
+                    // UI에 추가
+                    const sizeItem = document.createElement('div');
+                    sizeItem.className = 'size-item';
+                    
+                    const displayCanvas = canvas.cloneNode();
+                    const displayCtx = displayCanvas.getContext('2d');
+                    displayCtx.drawImage(canvas, 0, 0);
+                    
+                    displayCanvas.style.width = '80px';
+                    displayCanvas.style.height = '80px';
+                    
+                    const label = document.createElement('div');
+                    label.className = 'size-label';
+                    label.textContent = `${iconInfo.size}×${iconInfo.size}`;
+                    
+                    const nameLabel = document.createElement('div');
+                    nameLabel.className = 'size-label';
+                    nameLabel.style.fontSize = '10px';
+                    nameLabel.style.color = '#999';
+                    nameLabel.textContent = iconInfo.name;
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'download-btn';
+                    downloadBtn.textContent = '다운로드';
+                    downloadBtn.onclick = () => downloadIcon(canvas, iconInfo.size);
+                    
+                    sizeItem.appendChild(displayCanvas);
+                    sizeItem.appendChild(label);
+                    sizeItem.appendChild(nameLabel);
+                    sizeItem.appendChild(downloadBtn);
+                    
+                    sizesGrid.appendChild(sizeItem);
+                    
+                    completed++;
+                    const progressPercent = (completed / total) * 100;
+                    progressBar.style.width = progressPercent + '%';
+                    
+                    if (completed === total) {
+                        setTimeout(() => {
+                            progress.style.display = 'none';
+                        }, 1000);
+                    }
+                }, index * 50); // 50ms 간격으로 생성
+            });
+        }
+
+        function downloadIcon(canvas, size) {
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `crochet-ain-${size}x${size}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+    </script>
+</body>
+</html> 

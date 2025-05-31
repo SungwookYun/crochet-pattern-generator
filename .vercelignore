@@ -1,0 +1,12 @@
+api/
+node_modules/
+server.js
+package.json.backup
+package-lock.json
+*.py
+*.bat
+*.md
+.env
+fine-tuning/
+uploads/
+crochetain-redirect/ 
