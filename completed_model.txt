@@ -1,4 +1,0 @@
-Model ID: ft:gpt-3.5-turbo-0125:personal::BcXjZalp
-Completed at: 2025-05-29 22:50:10
-Training examples: 16
-Validation examples: 4
